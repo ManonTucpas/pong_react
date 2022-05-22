@@ -89,8 +89,10 @@ class App extends Component {
 	/* check si on peut bouger le planche du palyer ou de celle de l'opposant */
 	moveBoard = (playerBoard, isUp) => {}
 
-	/* check si la balle touche les bords du tableau */
-	touchingEdge = (pos) => {}
+	/* check si la balle touche les bords haut et bas du tableau */
+	touchingEdge = (pos) => {
+		(0 <= pos && pos < COL_SIZE) || (COL_SIZE * (ROW_SIZE - 1) <= pos && pos < COL_SIZE * ROW_SIZE)
+	} 
 
 	/* check si la balle touche la barre du joueur -en vertical- */
 	touchingPaddle = (pos)=> {}
