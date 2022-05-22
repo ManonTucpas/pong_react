@@ -1,13 +1,23 @@
 import React from "react"
 
 
+/* enum */
+const BACKGROUND = 0;
+const PLAYER = 1;
+const BALL = 2;
+export {
+    BACKGROUND,
+    PLAYER,
+    BALL,
+}
+
 /* style tableau */ 
 const backgroundStyle = {
     height: "35px",
     width: "35px",
     borderStyle: "solid",
     justifyContent: "center",
-    backgroundColor: "white",
+    backgroundColor: "black",
     borderRadius: "2px"
 }
 
@@ -30,15 +40,7 @@ const ballStyle = {
     color:"white"
 }
 
-/* enum */
-const BACKGROUND = 0;
-const PLAYER = 1;
-const BALL = 2;
-export {
-    BACKGROUND,
-    PLAYER,
-    BALL,
-}
+
 
 
 /* fonction pour savoir quel style on veut */
@@ -60,7 +62,7 @@ const getStyle = (val) => {
     getStyle permet de recuperer si on veut le stylePlayer ou styleBall*/
 
 const Box = (props) => <div style = {backgroundStyle}>
-                     <div style={getStyle(props.name)} />    
+                     <div style={getStyle(props.name)} /> 
 </div>
 
 export default Box
