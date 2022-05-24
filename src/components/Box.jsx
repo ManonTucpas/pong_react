@@ -38,8 +38,8 @@ const ballStyle = {
     justifyContent: "center",
     borderRadius: "100%",
     color:"white",
-    zIndex: "10",
-    position: 'relative'
+    zIndex: "8",
+    position: "relative"
 }
 
 

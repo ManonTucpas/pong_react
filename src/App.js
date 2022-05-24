@@ -325,7 +325,6 @@ class App extends Component {
 				<div style={inner}>
 					{/* on retourne le retour de board a chaque position */}
 						<div style={style}>{board}</div>
-					
 						<div style={score}>{this.state.playerScore}</div> 
 						<div style={dividerStyle}>{divider}</div>
 						<div style={scoreop}>{this.state.opponentScore}</div> 
