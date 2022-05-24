@@ -5,7 +5,7 @@ import { BACKGROUND,  BALL, PLAYER } from './components/Box';
 
 /* taille du tableau de jeu */
 const ROW_SIZE = 10;
-const COL_SIZE = 20;
+const COL_SIZE = 21;
 
 /* taille  barre de joueur  
 		 _
@@ -36,6 +36,7 @@ const inner = {
 	justifyContent: "justify",
 }
 
+/* Position de la totalite du jeu sur la page */
 const outer = {
 	display: "flex",
 	flexDirection: "column",
@@ -48,9 +49,15 @@ const outer = {
 
 const score = {
 	marginLeft: "100px",
-	fontSize: "50px",
+	fontSize: "30px",
 	color: "white"
 }
+const scoreop = {
+	marginLeft: "50px",
+	fontSize: "30px",
+	color: "white"
+}
+
 
 const dividerStyle = {
     marginLeft: "50px",
@@ -69,7 +76,7 @@ const InitialState = () => {
 			et va s'etendre sur trois case x++ sur le 21 et x++ sur le 31*/
 		player: paddle.map(x => (x * COL_SIZE) + PADDLE_EDGE_SPACE), // player sera a gauche du tab
 		opponent: paddle.map(x => ((x + 1) * COL_SIZE) - (PADDLE_EDGE_SPACE + 1)), // opponent sera a droite du tab
-		ball: Math.round((ROW_SIZE * COL_SIZE) / 2) + (ROW_SIZE),  // on positionne la balle au milieu
+		ball: ((ROW_SIZE * COL_SIZE) / 2) + (ROW_SIZE),  // on positionne la balle au milieu
 		ballSpeed: 180,
 		deltaY: -COL_SIZE,
 		deltaX: -1, // si -1 la balle va vers le player / si 1 elle va vers l'opposant
@@ -97,7 +104,7 @@ class App extends Component {
 			quand le jeu est reste on remt la balle au milieu
 	*/
 	resetGame = () => this.setState({
-		ball: Math.round((ROW_SIZE * COL_SIZE) / 2) + ROW_SIZE,
+		ball:((ROW_SIZE * COL_SIZE) / 2) + (ROW_SIZE),
 	})
 
 	/* check si on peut bouger le planche du palyer ou de celle de l'opposant
@@ -176,7 +183,7 @@ class App extends Component {
 	touchingPaddle = (pos)=> {
 
 		const which = this.state.deltaX === -1 ? "player" : "opponent"
-		if ( ( this.state.player.indexOf(pos) !== -1) ||   (this.state.opponent.indexOf(pos) !== -1)  ||
+		if ( ( this.state.player.indexOf(pos) !== -1) || (this.state.opponent.indexOf(pos) !== -1) ||
 		( which.indexOf(pos + this.state.deltaX) !== -1)) {
 			return true
 		}
@@ -256,14 +263,14 @@ class App extends Component {
 					playerScore: this.state.playerScore + 1,
 					ball: newState,
 				})
-				console.log('player won')
+				// console.log('player won')
 
 			} else {
 				this.setState ({
 					opponentScore: this.state.opponentScore + 1,
 					ball: newState,
 				})
-				console.log('opponent won')
+				// console.log('opponent won')
 			}
 			this.setState({pause: true})
 			this.resetGame();
@@ -311,16 +318,17 @@ class App extends Component {
 			return <Box key={pos} k={pos} name={val} />;
 
 		})
-		const divider = [...Array((ROW_SIZE/2) + 2)].map(_=> <div>{"|"}</div>);
+		const divider = [...Array(ROW_SIZE / 2)].map(_=> <div>{"|"}</div>);
 		return (
 			<div style={outer}>
-				<h1>{"[space]"} {this.state.pause ? "PLAY/pause" : "play/PAUSE"} </h1>
+				<h1>{"Space to pause the game"} {this.state.pause ? "PLAY/pause" : "play/PAUSE"} </h1>
 				<div style={inner}>
 					{/* on retourne le retour de board a chaque position */}
 						<div style={style}>{board}</div>
+					
 						<div style={score}>{this.state.playerScore}</div> 
 						<div style={dividerStyle}>{divider}</div>
-						<div style={score}>{this.state.opponentScore}</div> 
+						<div style={scoreop}>{this.state.opponentScore}</div> 
 				</div>
 			</div>
 		);

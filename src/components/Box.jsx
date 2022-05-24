@@ -18,7 +18,7 @@ const backgroundStyle = {
     borderStyle: "solid",
     justifyContent: "center",
     backgroundColor: "black",
-    borderRadius: "2px"
+    // borderRadius: "2px"
 }
 
 const playerStyle = {
