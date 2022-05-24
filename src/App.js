@@ -45,11 +45,18 @@ const outer = {
 	Text:"100px",
 	padding:"10px"
 }
-// const dividerStyle = {
-//     marginLeft: "50px",
-//     fontSize: "50px",
-//     color: "white"
-// }
+
+const score = {
+	marginLeft: "100px",
+	fontSize: "50px",
+	color: "white"
+}
+
+const dividerStyle = {
+    marginLeft: "50px",
+    fontSize: "50px",
+    color: "white"
+}
 
 const InitialState = () => {
 		
@@ -63,7 +70,7 @@ const InitialState = () => {
 		player: paddle.map(x => (x * COL_SIZE) + PADDLE_EDGE_SPACE), // player sera a gauche du tab
 		opponent: paddle.map(x => ((x + 1) * COL_SIZE) - (PADDLE_EDGE_SPACE + 1)), // opponent sera a droite du tab
 		ball: Math.round((ROW_SIZE * COL_SIZE) / 2) + (ROW_SIZE),  // on positionne la balle au milieu
-		ballSpeed: 50,
+		ballSpeed: 180,
 		deltaY: -COL_SIZE,
 		deltaX: -1, // si -1 la balle va vers le player / si 1 elle va vers l'opposant
 		pause: true, // pour commencer le jeu
@@ -107,7 +114,7 @@ class App extends Component {
 			
 			if (!this.touchingEdge(this.state.ball)) {
 				switch (this.state.ball) {
-					case playerEdge + deltaY - 1:
+					case playerEdge+deltaY-1:
 						this.setState({
 							deltaY: newDir,
 							deltaX: -1,
@@ -139,7 +146,7 @@ class App extends Component {
 		/* on bouge la balle si l'etat actuel n'est pas en pause
 			setInterval prend en param la fonction qui bouge la balle si le jeu n'est pas en pause
 			et la vitesse de la balle 
-			setInterval permet d'actualiser a caque inteerval donne , ici la vitesse de la balle
+			setInterval permet d'actualiser a chaque interval donne , ici la vitesse de la balle
 			et ensuite la vitesse du player oppose*/
 		setInterval(() => {
 			if (!this.state.pause) {
@@ -167,22 +174,28 @@ class App extends Component {
 	/* check si la balle touche la barre du joueur -en vertical-
 	indexof retournera -1 la position du player ne correspond pas a la 'pos' */
 	touchingPaddle = (pos)=> {
-		if  ( this.state.player.indexOf(pos) !== -1) {
-			console.log('paddle player 1')
-			return true
-		}
-		if  (this.state.opponent.indexOf(pos) !== -1) 
-		{
-			console.log('paddle player 2')
-			return true
 
-		}
 		const which = this.state.deltaX === -1 ? "player" : "opponent"
-		if ( which.indexOf(pos + this.state.deltaX) !== -1) {
-				console.log('paddle player 3')
-			
-				return true
+		if ( ( this.state.player.indexOf(pos) !== -1) ||   (this.state.opponent.indexOf(pos) !== -1)  ||
+		( which.indexOf(pos + this.state.deltaX) !== -1)) {
+			return true
 		}
+		// if ( ( this.state.player.indexOf(pos) !== -1) {
+		// 	console.log('paddle player 1')
+		// 	return true
+		// }
+		// else if  (this.state.opponent.indexOf(pos) !== -1) 
+		// {
+		// 	console.log('paddle player 2')
+		// 	return true
+
+		// }
+		
+		// else if ( which.indexOf(pos + this.state.deltaX) !== -1) {
+		// 		console.log('paddle player 3')
+			
+		// 		return true
+		// }
 	}
 
 	/* check si la ball touche le haut ou bas de la barre du jouer -horizontal- */
@@ -191,12 +204,7 @@ class App extends Component {
 		this.state.opponent[0] === pos ||
 		this.state.opponent[PADDLE_BOARD_SIZE - 1] === pos
 
-	/* pour bouger la barre de l'opposant */
-	moveOpponent = () => {
-		const movedPlayer = this.moveBoard(this.state.opponent, this.state.opponentDir);
-		movedPlayer ? this.setState({opponent: movedPlayer}) :
-						this.setState({opponentDir: !this.state.opponentDir});
-	} 
+
 
 
 	/* check si la balle a marque un point
@@ -207,6 +215,12 @@ class App extends Component {
 	isScore = (pos) => (this.state.deltaX === -1 && pos % COL_SIZE === 0) ||
 						(this.state.deltaX === 1 && (pos + 1) % COL_SIZE === 0)
 
+	/* pour bouger la barre de l'opposant */
+	moveOpponent = () => {
+		const movedPlayer = this.moveBoard(this.state.opponent, this.state.opponentDir);
+		movedPlayer ? this.setState({opponent: movedPlayer}) :
+						this.setState({opponentDir: !this.state.opponentDir});
+	} 
 	/* fait rebondir la balle
 		si la ball touche un des bords bas et haut le delta Y change car la ball doit aller dans la direction inverse
 		si la balle touche la barre de joueur c'est le deltaX qui va changer pour les meme raisons*/
@@ -217,17 +231,17 @@ class App extends Component {
 		/* si ca touche le bord on change le delta Y avec setState */
 		if (this.touchingEdge(newState)) {
 			this.setState({deltaY: -this.state.deltaY})
-			console.log("touching edge")
+			// console.log("touching edge")
 
 		}
 		if (this.touchingPaddleEdge(newState)) {
 			this.setState({deltaY: -this.state.deltaY})
-			console.log("touching paddleEdge")
+			// console.log("touching paddleEdge")
 
 		}
 		if (this.touchingPaddle(newState)) {
 			this.setState({deltaX: -this.state.deltaX})
-			console.log("touching paddle")
+			// console.log("touching paddle")
 		}
 		
 
@@ -242,11 +256,14 @@ class App extends Component {
 					playerScore: this.state.playerScore + 1,
 					ball: newState,
 				})
+				console.log('player won')
+
 			} else {
 				this.setState ({
 					opponentScore: this.state.opponentScore + 1,
 					ball: newState,
 				})
+				console.log('opponent won')
 			}
 			this.setState({pause: true})
 			this.resetGame();
@@ -294,14 +311,16 @@ class App extends Component {
 			return <Box key={pos} k={pos} name={val} />;
 
 		})
-		// const divider = [...Array(ROW_SIZE/2)].map(_=> <div>{"|"}</div>);
+		const divider = [...Array((ROW_SIZE/2) + 2)].map(_=> <div>{"|"}</div>);
 		return (
 			<div style={outer}>
-				<h1>{["space"]} {this.state.pause ? "PLAY/pause" : "play/PAUSE"} </h1>
+				<h1>{"[space]"} {this.state.pause ? "PLAY/pause" : "play/PAUSE"} </h1>
 				<div style={inner}>
 					{/* on retourne le retour de board a chaque position */}
-						<div style={style}>{board}</div> 
-						{/* <div style={{dividerStyle}}>  {divider} </div> */}
+						<div style={style}>{board}</div>
+						<div style={score}>{this.state.playerScore}</div> 
+						<div style={dividerStyle}>{divider}</div>
+						<div style={score}>{this.state.opponentScore}</div> 
 				</div>
 			</div>
 		);
